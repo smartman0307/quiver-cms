@@ -1,0 +1,95 @@
+<div class="column small-12">
+    <div class="column small-12 medium-8 large-10 medium-offset-4 large-offset-2">
+        <h3 class="font-flair">Files</h3>
+    </div>
+    <hr>
+</div>
+
+<div class="column small-12 medium-4 large-2">
+    <form name="filesForm" flow-init="{target: uploadTarget}" flow-name="flow">
+        <fieldset>
+            <label class="button tiny small-12" for="upload-file">Select Files</label>
+            <input id="upload-file" class="hidden" type="file" flow-btn/>
+
+            <label class="button tiny small-12" for="upload-directory">Select Directory</label>
+            <input id="upload-directory" class="hidden" type="file" flow-btn flow-directory/>
+
+            <div class="panel callout" flow-drop flow-drag-enter="style={'border-color': '#4A910A'}" flow-drag-leave="style={}">
+                File Drop
+            </div>
+
+            <ul ng-if="$flow.files.length" class="side-nav">
+                <li ng-repeat="file in $flow.files">
+                    <a class="qv-progress text-x-small success" qv-confirm="deleteFlowFile($flow, file)" confirmations="['Click to Delete']">
+                        <span class="meter-text text-black">{{ file.name }} {{ file.size / 1000 | number:0 }}kb</span>
+                        <span class="meter" qv-meter="file.percentComplete"></span>
+                    </a>
+
+                </li>
+            </ul>
+
+            <button ng-click="upload($flow)" ng-hide="!$flow.files.length" ng-disabled="uploading">Upload Files</button>
+
+            <hr>
+            <button ng-show="files.Originals.length" ng-click="resize()" ng-disabled="resizing">Resize and Update</button>
+
+        </fieldset>
+
+
+    </form>
+
+    <div class="panel" ng-show="$storage.clipboard.length">
+        <h5>Clipboard</h5>
+        <ul class="side-nav">
+            <li ng-repeat="file in $storage.clipboard">
+                <a class="text-x-small" qv-confirm="removeFromClipboard(file)" confirmations="['Click to Remove']">{{ file.Key | filename }}</a>
+            </li>
+        </ul>
+    </div>
+
+
+
+</div>
+
+<div class="column small-12 medium-8 large-10">
+
+    <table ng-show="files.Originals.length">
+        <thead>
+            <tr>
+                <th>Details</th><th>Preview</th><th>Link</th><th>Markdown</th><th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="file in files.Originals" ng-class="{'disabled': file.disabled}">
+                <td>
+                    <div>
+                        <select ng-model="fileVersion" ng-change="console.log(version)">
+                            <option value="" selected>Original ({{ file.Size / 1000 | number:0 }}kb)</option>
+                            <option ng-repeat="(key, version) in file.Versions" value="{{ key }}">{{ key }} {{ version.Name }} ({{ version.Size / 1000 | number:0 }}kb)</option>
+                        </select>
+                    </div>
+
+                </td>
+                <td>
+                    <a ng-if='!fileVersion' href="{{ file.Key | s3Link:files.Name }}" target="_blank" qv-media="{{ file.Key | s3Link:files.Name }}" alt="{{ file.Key | filename }}" attributes="{embed: {width: '100px', height: '100px'}, img: {'style': 'min-width: 100%;'}, video: {width: '200px'}}"></a>
+                    <a ng-if="fileVersion" href="{{ file.Versions[fileVersion].Key | s3Link:files.Name }}" target="_blank" qv-media="{{ file.Key | s3Link:files.Name }}" alt="{{ file.Key | filename }}" attributes="{embed: {width: '100px', height: '100px'}, img: {'style': 'min-width: 100%;'}, video: {width: '200px'}}"></a>
+                </td>
+                <td>
+                    <input ng-if="!fileVersion" type="text" qv-select-text value="{{ file.Key | s3Link:files.Name }}"/>
+                    <input ng-if="fileVersion" type="text" qv-select-text value="{{ file.Versions[fileVersion].Key | s3Link:files.Name }}"/>
+                </td>
+                <td>
+                    <input ng-if="!fileVersion" type="text" value="![{{ file.Key | filename }}]({{ file.Key | s3Link:files.Name }})" qv-select-text/>
+                    <input ng-if="fileVersion" type="text" value="![{{ file.Versions[fileVersion].Key | filename }}]({{ file.Versions[fileVersion].Key | s3Link:files.Name }})" qv-select-text/>
+                </td>
+                <td>
+                    <button class="tiny secondary" ng-click="addToClipboard(file)" ng-hide="inClipboard(file) || file.disabled">+ Clipboard</button>
+                    <!--<button class="tiny secondary" ng-click="removeFromClipboard(file)" ng-show="inClipboard(file)">- Clipboard</button>-->
+                    <button class="alert tiny right" qv-confirm="removeFile(file); file.disabled = true;" confirmations="['Confirm']" ng-disabled="file.disabled">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+

@@ -1,0 +1,14 @@
+node_modules
+dist
+.tmp
+.sass-cache
+.idea
+.DS_STORE
+app/lib
+*env.js
+assets/ssl
+newrelic.js
+newrelic_agent.log
+logs/*
+uploads/*
+resize/*

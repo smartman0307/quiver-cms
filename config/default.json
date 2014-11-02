@@ -50,12 +50,12 @@
     }
   },
   "private": {
+    "content": {
+      "port": 9800
+    },
     "cms": {
       "folder": "app",
       "staticEnabled": false,
-      "port": 9800
-    },
-    "content": {
       "port": 9801
     },
     "firebase": {
@@ -71,7 +71,8 @@
     },
     "amazon": {
       "accessKeyId": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      "secretAccessKey": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      "secretAccessKey": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "filePrefix": "cms"
     },
     "redis": {
       "dbIndex": 0,

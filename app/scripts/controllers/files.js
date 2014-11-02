@@ -169,17 +169,13 @@ angular.module('quiverCmsApp')
     };
 
     $scope.removeFile = function (file) {
-      var parts = file.Key.split("/"),
-      fileName;
-
-      parts.shift();
-      fileName = parts.join("|");
+      var fileName = $filter('filename')(file.Key);
 
       if ($scope.inClipboard(file)) {
         $scope.removeFromClipboard(file);
       }
 
-      FileService.remove(fileName || $filter('filename')(file.Key)).then(function () {
+      FileService.remove(file.Name || $filter('filename')(file.Key)).then(function () {
         NotificationService.success('File Removed', 'Removed ' + fileName);
       }, function (err) {
         NotificationService.error('File Removal Failed', err);

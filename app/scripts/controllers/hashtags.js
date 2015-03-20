@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('quiverCmsApp')
-  .controller('HashtagsCtrl', function ($scope, hashtags, NotificationService, Slug, $timeout) {
-    $scope.hashtags = hashtags;
+  .controller('HashtagsCtrl', function ($scope, hashtagsRef, NotificationService, Slug, $timeout) {
+    $scope.hashtags = hashtagsRef.$asArray();
 
     $scope.createHashtag = function (hashtag) {
       $timeout(function () {

@@ -8,28 +8,24 @@
  * Service in the quiverCmsApp.
  */
 angular.module('quiverCmsApp')
-  .service('UserService', function ($firebaseObject, $firebaseArray, env, Restangular, FirebaseService) {
+  .service('UserService', function ($firebase, env, Restangular, FirebaseService) {
     var firebaseEndpoint = env.firebase.endpoint;
 
     return {
-      getPublic: function (userId) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/users/' + userId + '/public'));
-      },
-
       getTransactions: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/transactions/' + userId), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/transactions/' + userId), query));
       },
 
       getTransaction: function (userId, key) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/transactions/' + userId + '/' + key));
+        return $firebase(new Firebase(firebaseEndpoint + '/transactions/' + userId + '/' + key));
       },
 
       getSubscriptions: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/subscriptions/' + userId), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/subscriptions/' + userId), query));
       },
 
       getSubscription: function (userId, key) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/subscriptions/' + userId + '/' + key));
+        return $firebase(new Firebase(firebaseEndpoint + '/subscriptions/' + userId + '/' + key));
       },
 
       getPages: function(userId, key) {
@@ -49,19 +45,19 @@ angular.module('quiverCmsApp')
       },
 
       getSentMessages: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/messages/' + userId + '/sent'), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/messages/' + userId + '/sent'), query));
       },
 
       getSentMessage: function (userId, key) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/messages/' + userId + '/sent/' + key));
+        return $firebase(new Firebase(firebaseEndpoint + '/messages/' + userId + '/sent/' + key));
       },
 
       getReceivedMessages: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/messages/' + userId + '/received'), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/messages/' + userId + '/received'), query));
       },
 
       getReceivedMessage: function (userId, key) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/messages/' + userId + '/received/' + key));
+        return $firebase(new Firebase(firebaseEndpoint + '/messages/' + userId + '/received/' + key));
       },
 
       sendMessage: function (userId, recipientId, text) {
@@ -69,43 +65,39 @@ angular.module('quiverCmsApp')
       },
 
       getSubmittedAssignments: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted'), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted'), query));
       },
 
       getAssignment: function (userId, key) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted/' + key));
+        return $firebase(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted/' + key));
       },
 
-      getAssignmentUploads: function (userId, key, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted/' + key + '/uploads'), query));
+      getAssignmentUploads: function (userId, key) {
+        return $firebase(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted/' + key + '/uploads'));
       },
 
       getAssignmentMessages: function (userId, key) {
-        return $firebaseArray(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted/' + key + '/messages'));
+        return $firebase(new Firebase(firebaseEndpoint + '/assignments/' + userId + '/submitted/' + key + '/messages'));
       },
 
       getMessage: function (userId, key) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/messages/' + userId + '/' + key));
+        return $firebase(new Firebase(firebaseEndpoint + '/messages/' + userId + '/' + key));
       },
 
       getShipments: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/shipments/' + userId), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/shipments/' + userId), query));
       },      
 
       getShipment: function (userId, key) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/shipments/' + userId + '/' + key));
+        return $firebase(new Firebase(firebaseEndpoint + '/shipments/' + userId + '/' + key));
       },
 
       getGifts: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/gifts/' + userId), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/gifts/' + userId), query));
       },
       
       getDownloads: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/downloads/' + userId), query));
-      },
-
-      getSurveyLog: function (userId, query) {
-        return $firebaseArray(FirebaseService.query(new Firebase(firebaseEndpoint + '/users/' + userId + '/public/logs/survey'), query));
+        return $firebase(FirebaseService.query(new Firebase(firebaseEndpoint + '/downloads/' + userId), query));
       }
       
     };

@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('quiverCmsApp')
-  .controller('DashboardCtrl', function ($scope, limit, assignments, subscriptions, shipments, gifts, downloads, transactions, UserService, $stateParams, moment, _) {
+  .controller('DashboardCtrl', function ($scope, limit, assignmentsRef, subscriptionsRef, shipmentsRef, giftsRef, downloadsRef, transactionsRef, UserService, $stateParams, moment, _) {
 
     /*
      * Objects
      */
-    $scope.subscriptions = subscriptions;
-    $scope.shipments = shipments;
-    $scope.gifts = gifts;
-    $scope.downloads = downloads;
-    $scope.transactions = transactions;
+    $scope.subscriptions = subscriptionsRef.$asArray();
+    $scope.shipments = shipmentsRef.$asArray();
+    $scope.gifts = giftsRef.$asArray();
+    $scope.downloads = downloadsRef.$asArray();
+    $scope.transactions = transactionsRef.$asArray();
 
     /*
      * Assignments
@@ -28,7 +28,6 @@ angular.module('quiverCmsApp')
         while (j--) {
             flatMessages[j].subscriptionKey = assignments[i].subscriptionKey;            
             flatMessages[j].assignmentKey = assignments[i].assignmentKey;
-            flatMessages[j].title = assignments[i].title;
         }
 
         messages = messages.concat(flatMessages);
@@ -40,7 +39,7 @@ angular.module('quiverCmsApp')
       });  
     };
 
-    $scope.assignments = assignments;
+    $scope.assignments = assignmentsRef.$asArray();
 
     $scope.assignments.$loaded().then(function (assignments) {
       populateMessages(assignments);

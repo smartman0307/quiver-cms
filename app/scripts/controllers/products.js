@@ -8,12 +8,12 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('ProductsCtrl', function ($scope, products, files, Slug) {
+  .controller('ProductsCtrl', function ($scope, productsRef, filesRef, Slug) {
 
     /*
      * Products
     */
-    $scope.products = products;
+    $scope.products = productsRef.$asArray();
 
     $scope.addProduct = function (newProduct) {
         newProduct.slug = Slug.slugify(newProduct.title);
@@ -29,7 +29,7 @@ angular.module('quiverCmsApp')
     /*
      * Files
     */
-    $scope.files = files;
+    $scope.files = filesRef.$asObject();
 
 
   });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('quiverCmsApp')
-  .service('FileService', function FileService($q, Restangular, $firebaseObject, env) {
+  .service('FileService', function FileService($q, Restangular, $firebase, env) {
     var service = {
       create: function (file, fileReader, size) {
         var formData = new FormData();
@@ -48,7 +48,7 @@ angular.module('quiverCmsApp')
       },
 
       getNotification: function (userId, slug) {
-        return $firebaseObject(new Firebase(env.firebase.endpoint + '/users/' + userId + '/notifications/' + slug));
+        return $firebase(new Firebase(env.firebase.endpoint + '/users/' + userId + '/notifications/' + slug));
       },
 
       update: function () {

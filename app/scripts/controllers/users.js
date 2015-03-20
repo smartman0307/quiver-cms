@@ -8,12 +8,12 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('UsersCtrl', function ($scope, messageable, AdminService, NotificationService, _) {
+  .controller('UsersCtrl', function ($scope, messageableRef, AdminService, NotificationService, _) {
 
-    $scope.messageable = messageable;
+    $scope.messageable = messageableRef.$asArray();
 
     $scope.saveUserRoles = function (user) {
-      var serverUser = AdminService.getUser(user.$id);
+      var serverUser = AdminService.getUser(user.$id).$asObject();
 
       serverUser.$loaded().then(function () {
         serverUser.private.isAdmin = user.private.isAdmin;
@@ -26,7 +26,7 @@ angular.module('quiverCmsApp')
     };
 
     $scope.saveUserMessageable = function (user) {
-      var serverUser = AdminService.getUser(user.$id);
+      var serverUser = AdminService.getUser(user.$id).$asObject();
 
       return serverUser.$loaded().then(function () {
         serverUser.messageable = user.messageable || false;

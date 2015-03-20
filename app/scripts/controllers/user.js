@@ -8,7 +8,8 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('UserCtrl', function ($scope, user, CommerceService) {
+  .controller('UserCtrl', function ($scope, userRef, CommerceService) {
+    var user = userRef.$asObject();
 
     user.$bindTo($scope, 'user');    
 

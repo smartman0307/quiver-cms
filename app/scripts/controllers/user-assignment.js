@@ -8,22 +8,21 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('UserAssignmentCtrl', function ($scope, $q, $filter, Slug, $stateParams, assignment, userAssignment, userAssignmentUploads, userAssignmentMessages, notifications, user, UserService, NotificationService, moment, env, FileService, $timeout, $interval) {
+  .controller('UserAssignmentCtrl', function ($scope, $q, $filter, Slug, $stateParams, assignmentRef, userAssignmentRef, userAssignmentUploadsRef, userAssignmentMessagesRef, notificationsRef, user, UserService, NotificationService, moment, env, FileService, $timeout, $interval) {
     /*
      * Assignment
      */
-    $scope.assignment = assignment;
+    $scope.assignment = assignmentRef.$asObject();
 
     /*
      * User Assignment
      */
-    $scope.userAssignment = userAssignment;
+    $scope.userAssignment = userAssignmentRef.$asObject();
 
     var setSubscriptionKey = function () {
-      if (!$scope.userAssignment.subscriptionKey || !$scope.userAssignment.assignmentKey || !$scope.userAssignment.title) {
+      if (!$scope.userAssignment.subscriptionKey || !$scope.userAssignment.assignmentKey) {
         $scope.userAssignment.subscriptionKey = $stateParams.subscriptionKey;
         $scope.userAssignment.assignmentKey = $stateParams.assignmentKey;
-        $scope.userAssignment.title = assignment.title;
         $scope.userAssignment.$save();
       }
     };
@@ -31,12 +30,12 @@ angular.module('quiverCmsApp')
     /*
      * Uploads
      */
-    $scope.uploads = userAssignmentUploads;
+    $scope.uploads = userAssignmentUploadsRef.$asArray();
 
     /*
      * Messages
      */
-    $scope.messages = userAssignmentMessages;
+    $scope.messages = userAssignmentMessagesRef.$asArray();
 
     $scope.sendMessage = function (text) {
       var now = moment(),
@@ -52,7 +51,7 @@ angular.module('quiverCmsApp')
         setSubscriptionKey();
         message.key = ref.key();
         
-        return UserService.logMessage(user.public.id, assignment.$ref().key(), 'comment', message);
+        return UserService.logMessage(user.public.id, assignmentRef.$ref().key(), 'comment', message);
       });
     };
 
@@ -66,7 +65,7 @@ angular.module('quiverCmsApp')
     /*
      * Notifications
     */
-    $scope.notifications = notifications;
+    $scope.notifications = notificationsRef.$asObject();
 
     $scope.getSlug = function (name) {
       var filename = $filter('filename')(name, {'[\\.]': '-'});
@@ -86,7 +85,7 @@ angular.module('quiverCmsApp')
     /*
      * Files
     */
-    $scope.uploadTarget = env.api + '/user/' + user.public.id + '/assignment/' + assignment.$ref().key() + '/upload';
+    $scope.uploadTarget = env.api + '/user/' + user.public.id + '/assignment/' + assignmentRef.$ref().key() + '/upload';
 
     $scope.deleteFlowFile = function (flow, file) {
       var i = flow.files.length;
@@ -149,7 +148,7 @@ angular.module('quiverCmsApp')
       while (i--) {
         file = Flow.files[i];
 
-        var notification = FileService.getNotification($scope.user.$id, $scope.getSlug(file.name)),
+        var fileRef = FileService.getNotification($scope.currentUser.uid, $scope.getSlug(file.name)),
           fileDeferred = $q.defer(),
           fileHandler = function (j, fileDeferred) {
             return function () {
@@ -172,7 +171,7 @@ angular.module('quiverCmsApp')
 
         promises.push(fileDeferred.promise);
 
-        file.notification = notification;
+        file.notification = fileRef.$asObject();
 
         file.notification.$loaded().then(fileHandler(i, fileDeferred));
 

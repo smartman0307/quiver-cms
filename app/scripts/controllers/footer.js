@@ -8,11 +8,11 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('FooterCtrl', function ($scope, files, limit, AdminService, env) {
+  .controller('FooterCtrl', function ($scope, filesRef, limit, AdminService, env) {
     /*
      * qv-list
      */
-    $scope.files = files;
+    $scope.filesRef = filesRef;
     $scope.limit = limit;
     $scope.getOriginals = AdminService.getOriginals;
     $scope.bucket = env.amazon.publicBucket;

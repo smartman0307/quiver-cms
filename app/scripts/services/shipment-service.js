@@ -8,7 +8,7 @@
  * Service in the quiverCmsApp.
  */
 angular.module('quiverCmsApp')
-  .service('ShipmentService', function (Restangular, env, $firebaseObject, $firebaseArray) {
+  .service('ShipmentService', function (Restangular, env, $firebase) {
     var easypost = env.easypost,
       firebaseEndpoint = env.firebase.endpoint;
 
@@ -34,13 +34,11 @@ angular.module('quiverCmsApp')
       },
 
       saveQuote: function (shipmentKey, quote) {
-        var quoteObj = $firebaseObject(new Firebase(firebaseEndpoint + '/logs/shipments/' + shipmentKey + '/quote'));
-        quoteObj = quote;
-        return quoteObj.$save();
+        return $firebase(new Firebase(firebaseEndpoint + '/logs/shipments/' + shipmentKey + '/quote')).$set(quote);
       },
 
       removeQuote: function (shipmentKey) {
-        return $firebaseObject(new Firebase(firebaseEndpoint + '/logs/shipments/' + shipmentKey + '/quote')).$remove();
+        return $firebase(new Firebase(firebaseEndpoint + '/logs/shipments/' + shipmentKey + '/quote')).$remove();
       },
 
       refundShipment: function (shipmentKey, labelKey) {

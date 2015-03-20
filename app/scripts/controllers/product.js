@@ -8,12 +8,13 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('ProductCtrl', function ($scope, product, productImages, productOptionGroups, productOptionsMatrix, files, hashtags, NotificationService, ClipboardService, CommerceService, $localStorage, env, $filter, $timeout, Slug, _) {
+  .controller('ProductCtrl', function ($scope, productRef, productImagesRef, productOptionGroupsRef, productOptionsMatrixRef, filesRef, hashtagsRef, NotificationService, ClipboardService, CommerceService, $localStorage, env, $filter, $timeout, Slug, _) {
 
     /*
      * Product
     */
-    var checkValidity = function () {
+    var product = productRef.$asObject(),
+      checkValidity = function () {
         $timeout(function () {
           var product = $scope.product,
             invalidate = function () {
@@ -100,12 +101,12 @@ angular.module('quiverCmsApp')
     /*
      * Product Images
     */
-    $scope.productImages = productImages;
+    $scope.productImages = productImagesRef.$asArray();
 
     /*
      * Product Options Matrix
     */
-    var productOptionsMatrix = productOptionsMatrix;
+    var productOptionsMatrix = productOptionsMatrixRef.$asObject();
 
     productOptionsMatrix.$bindTo($scope, 'productOptionsMatrix');
 
@@ -211,7 +212,7 @@ angular.module('quiverCmsApp')
     /*
      * Product Option Groups
     */
-    $scope.productOptionGroups = productOptionGroups;
+    $scope.productOptionGroups = productOptionGroupsRef.$asArray();
 
     $scope.addOptionGroup = function () {
       $scope.productOptionGroups.$add({
@@ -286,7 +287,7 @@ angular.module('quiverCmsApp')
     /*
      * Files
     */
-    $scope.files = files;
+    $scope.files = filesRef.$asObject();
 
     $scope.makeFeaturedImage = function (file) {
       $scope.product.featuredImage = file;
@@ -314,7 +315,7 @@ angular.module('quiverCmsApp')
     /*
      * Hashtags
     */
-    $scope.hashtags = hashtags;
+    $scope.hashtags = hashtagsRef.$asArray();
 
     $scope.addHashtag = function (product, newHashtag) {
       $timeout(function () {

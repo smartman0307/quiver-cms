@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('quiverCmsApp')
-  .controller('WordsCtrl', function ($scope, words, hashtags, moment, NotificationService, Slug, $timeout, AdminService) {
+  .controller('WordsCtrl', function ($scope, wordsRef, hashtagsRef, moment, NotificationService, Slug, $timeout, AdminService) {
     /*
      * Words
     */
     // $scope.limit = limit;
-    var words = words;
+    var words = wordsRef.$asArray();
 
     // $scope.loadMore = function (increment) {
     //   $scope.limit += (increment || limit);
 
-    //   words = AdminService.getWords({orderByPriority: true, limitToFirst: $scope.limit});
-    //   words.$loaded().then(function (words) {
+    //   wordsRef = AdminService.getWords({orderByPriority: true, limitToFirst: $scope.limit});
+    //   wordsRef.$asArray().$loaded().then(function (words) {
     //     words = words;
     //   });
 
@@ -28,8 +28,8 @@ angular.module('quiverCmsApp')
     //     options = {orderByPriority: true, limitToFirst: $scope.limit}; 
     //   }
 
-    //   words = AdminService.getWords(options);
-    //   words.$loaded().then(function (words) {
+    //   wordsRef = AdminService.getWords(options);
+    //   wordsRef.$asArray().$loaded().then(function (words) {
     //     words = words;
     //   });
       
@@ -130,13 +130,7 @@ angular.module('quiverCmsApp')
         word.hashtags = hashtags;
       }
 
-      return word;
-
-      // words.$save(word).then(function (ref) {
-      //   NotificationService.success('Saved', word.title);
-      // }, function (error) {
-      //   NotificationService.error('Save Error', error);
-      // });
+      words.$save(word);
 
 
       // AdminService.getWord(word.$id).$set(_.omit(word, ['$$hashKey', '$id'])).then(function () {
@@ -168,26 +162,29 @@ angular.module('quiverCmsApp')
     /*
      * Hashtags
     */
-    $scope.hashtags = hashtags;
+    $scope.hashtags = hashtagsRef.$asArray();
 
     $scope.addHashtag = function (word, newHashtag) {
-      var hashtag;
+      $timeout(function () {
+        var hashtag;
 
-      if (!word.hashtags) {
-        word.hashtags = [];
-      }
+        if (!word.hashtags) {
+          word.hashtags = [];
+        }
 
-      if (typeof newHashtag === 'string') {
-        hashtag = newHashtag.replace(/(#|\s)/g, '');
-        word.hashtags.push({
-          key: Slug.slugify(hashtag),
-          value: hashtag
-        });
-        return $scope.saveWord(word);
-      } else if (newHashtag && newHashtag.key) {
-        word.hashtags.push(word.newHashtag);
-        return $scope.saveWord(word);
-      }
+        if (typeof newHashtag === 'string') {
+          hashtag = newHashtag.replace(/(#|\s)/g, '');
+          word.hashtags.push({
+            key: Slug.slugify(hashtag),
+            value: hashtag
+          });
+          $scope.saveWord(word);
+        } else if (newHashtag && newHashtag.key) {
+          word.hashtags.push(word.newHashtag);
+          $scope.saveWord(word);
+        }
+
+      });
 
 
 

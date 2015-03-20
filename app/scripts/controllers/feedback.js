@@ -8,26 +8,28 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('FeedbackCtrl', function ($scope, client, assignment, userAssignment, assignmentUploads, assignmentMessages, UserService, AdminService, NotificationService) {
+  .controller('FeedbackCtrl', function ($scope, clientRef, assignmentRef, userAssignmentRef, assignmentUploadsRef, assignmentMessagesRef, UserService, AdminService, NotificationService) {
     /*
      * Client
      */
+    var client = clientRef.$asObject();
     client.$bindTo($scope, 'client');
     
     /*
      * Assignment
      */
-    $scope.assignment = assignment;
+    $scope.assignment = assignmentRef.$asObject();
 
     /*
      * User Assignment
      */
+    var userAssignment = userAssignmentRef.$asObject();
     userAssignment.$bindTo($scope, 'userAssignment');
 
     /*
      * Messages
      */
-    $scope.messages = assignmentMessages;
+    $scope.messages = assignmentMessagesRef.$asArray();
 
     $scope.sendMessage = function (text) {
       var user = $scope.user,
@@ -43,16 +45,16 @@ angular.module('quiverCmsApp')
       $scope.messages.$add(message).then(function (ref) {
         message.key = ref.key();
         message.isAdmin = true;
-        message.recipientId = client.$ref().key();
+        message.recipientId = clientRef.$ref().key();
 
-        UserService.logMessage(user.public.id, assignment.$ref().key(), 'comment', message);
+        UserService.logMessage(user.public.id, assignmentRef.$ref().key(), 'comment', message);
       });
     };
 
     /*
      * Uploads
      */
-    $scope.uploads = assignmentUploads;
+    $scope.uploads = assignmentUploadsRef.$asArray();
 
     // $scope.saveUpload = function (upload) {
     //   $scope.uploads.$save(upload);

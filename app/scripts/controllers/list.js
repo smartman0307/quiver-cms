@@ -12,7 +12,7 @@ angular.module('quiverCmsApp')
     /*
      * Items
      */
-    var items = ref;
+    var items = ref.$asArray();
     $scope.items = items;
     // items.$loaded().then(function (items) {
     //   console.log('items', items);
@@ -47,7 +47,7 @@ angular.module('quiverCmsApp')
       }
 
       ref = getRef(q);
-      items = ref;
+      items = ref.$asArray();
       items.$loaded().then(function (items) {
         var i = Math.max($scope.limit - items.length, 0),
          priority = $scope.getNullPriority ? $scope.getNullPriority(items) : 0;
@@ -156,14 +156,6 @@ angular.module('quiverCmsApp')
       });    
 
       return promise;
-    };
-
-    $scope.saveItem = function (item) {
-      return $scope.items.$save(item);
-    };
-
-    $scope.removeItem = function (item) {
-      return $scope.items.$remove(item);
     };
 
     items.$loaded().then(function () {

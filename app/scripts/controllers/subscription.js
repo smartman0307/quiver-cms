@@ -8,16 +8,16 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('SubscriptionCtrl', function ($scope, subscription, userSubscription, NotificationService, moment, $state) {
+  .controller('SubscriptionCtrl', function ($scope, subscriptionRef, userSubscriptionRef, NotificationService, moment, $state) {
     /*
      * Subscription
      */
-    $scope.subscription = subscription;
+    $scope.subscription = subscriptionRef.$asObject();
 
     /*
      * User Subscription
      */
-    $scope.userSubscription = userSubscription;
+    $scope.userSubscription = userSubscriptionRef.$asObject();
 
     /*
      * Actions

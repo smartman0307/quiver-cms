@@ -8,11 +8,10 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('TransactionCtrl', function ($scope, transaction, userTransaction, AdminService, NotificationService) {
-  	
-    /*
-     * Transaction
-     */
+  .controller('TransactionCtrl', function ($scope, transactionRef, userTransactionRef, AdminService, NotificationService) {
+  	var transaction = transactionRef.$asObject(),
+  		userTransaction = userTransactionRef.$asObject();
+
   	transaction.$bindTo($scope, 'transaction');
 
   	$scope.sendEmail = function (key, transaction) {

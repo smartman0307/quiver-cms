@@ -8,13 +8,12 @@
  * Controller of the quiverCmsApp
  */
 angular.module('quiverCmsApp')
-  .controller('ProductCtrl', function ($scope, productRef, productImagesRef, productOptionGroupsRef, productOptionsMatrixRef, filesRef, hashtagsRef, NotificationService, ClipboardService, CommerceService, $localStorage, env, $filter, $timeout, Slug, _) {
+  .controller('ProductCtrl', function ($scope, product, productImages, productOptionGroups, productOptionsMatrix, files, hashtags, NotificationService, ClipboardService, CommerceService, $localStorage, env, $filter, $timeout, Slug, _) {
 
     /*
      * Product
     */
-    var product = productRef.$asObject(),
-      checkValidity = function () {
+    var checkValidity = function () {
         $timeout(function () {
           var product = $scope.product,
             invalidate = function () {
@@ -101,13 +100,11 @@ angular.module('quiverCmsApp')
     /*
      * Product Images
     */
-    $scope.productImages = productImagesRef.$asArray();
+    $scope.productImages = productImages;
 
     /*
      * Product Options Matrix
     */
-    var productOptionsMatrix = productOptionsMatrixRef.$asObject();
-
     productOptionsMatrix.$bindTo($scope, 'productOptionsMatrix');
 
     var updateMatrix = function (optionGroups) {
@@ -185,6 +182,7 @@ angular.module('quiverCmsApp')
           $scope.productOptionsMatrix[keys[j]].slug = matrix[keys[j]].slug;
           $scope.productOptionsMatrix[keys[j]].shipped = matrix[keys[j]].shipped;
           $scope.productOptionsMatrix[keys[j]].priceDifference = matrix[keys[j]].priceDifference;
+          $scope.productOptionsMatrix[keys[j]].inStock = typeof $scope.productOptionsMatrix[keys[j]].inventory !== 'number' || $scope.productOptionsMatrix[keys[j]].inventory > 0;
         }
 
       }
@@ -212,7 +210,7 @@ angular.module('quiverCmsApp')
     /*
      * Product Option Groups
     */
-    $scope.productOptionGroups = productOptionGroupsRef.$asArray();
+    $scope.productOptionGroups = productOptionGroups;
 
     $scope.addOptionGroup = function () {
       $scope.productOptionGroups.$add({
@@ -277,7 +275,7 @@ angular.module('quiverCmsApp')
       $scope.productOptionGroups.$save(index).then(function () {
         updateMatrix($scope.productOptionGroups);
       });
-    }
+    };
 
     /*
      * localStorage
@@ -287,7 +285,7 @@ angular.module('quiverCmsApp')
     /*
      * Files
     */
-    $scope.files = filesRef.$asObject();
+    $scope.files = files;
 
     $scope.makeFeaturedImage = function (file) {
       $scope.product.featuredImage = file;
@@ -315,7 +313,7 @@ angular.module('quiverCmsApp')
     /*
      * Hashtags
     */
-    $scope.hashtags = hashtagsRef.$asArray();
+    $scope.hashtags = hashtags;
 
     $scope.addHashtag = function (product, newHashtag) {
       $timeout(function () {
